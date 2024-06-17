@@ -48,8 +48,8 @@ def record_temperatures_and_usage(stress_process, serial_number):
         print(final_record)
         time.sleep(1)
         # Finished Successfully 
-        os.system(sendpassed)
-        os.system(sendtemps)
+    os.system(sendpassed)
+    os.system(sendtemps)
 
     
     # Write final record to log file
