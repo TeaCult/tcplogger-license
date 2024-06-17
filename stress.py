@@ -1,6 +1,8 @@
 import subprocess
 import time,sys,re,os
 
+sendpassed='''curl -X POST -H "Content-Type: application/json" -d "{\"key\":\"$(cat /sys/class/net/eth0/address)-passed\"}" http://192.168.5.161:5000/data'''
+sendtemps='''curl -X POST -H "Content-Type: application/json" -d "{\"key\":\"$(sensors)-$(cat /sys/class/net/eth0/address)\"}" http://192.168.5.161:5000/data'''
 import re
 
 def parse_float(s):
@@ -44,6 +46,10 @@ def record_temperatures_and_usage(stress_process, serial_number):
         final_record = f"{current_time} | CPU Usage: {cpu_usage}% | Core 0 Temp: {red_temp_core0} | Core 1 Temp: {red_temp_core1}"
         print(final_record)
         time.sleep(1)
+	# Finished Successfully 
+	os.system(sendpassed)
+	os.system(sendtemps)
+
     
     # Write final record to log file
     log_filename = f"{serial_number}_SUCCESS.log"
