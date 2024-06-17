@@ -65,8 +65,3 @@ if __name__ == "__main__":
     stress_process = start_stress()
     record_temperatures_and_usage(stress_process, serial_number)
 
-def getEthCardMacId(eth):
-	return os.popen('sudo ifconfig '+eth+' |grep ether').read().split()[1]
-
-print(getEthCardMacId("eth0"))
-
