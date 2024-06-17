@@ -19,7 +19,7 @@ def get_serial_number():
 # Function to stress CPU, memory, and HDD
 def start_stress():
     # Adjust the stress parameters as needed
-    return subprocess.Popen(["stress", "--cpu", "4", "--io", "4", "--hdd", "4", "--vm", "4", "--vm-bytes", "256M", "--timeout", sys.argv[1] ])
+    return subprocess.Popen(["stress", "--cpu", "4", "--io", "4","--timeout", sys.argv[1] ])
 
 # Function to record temperatures and CPU usage
 def record_temperatures_and_usage(stress_process, serial_number):
