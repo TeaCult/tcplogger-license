@@ -4,12 +4,12 @@ pacman -Sy --noconfirm stress lm_sensors dmidecode wget python-crypto python-qrc
 sensors-detect --auto
 wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/stress.py
 wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/checkids.py
-wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/qrcode.py
+wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/qrcode-gen.py
 
 
 #python stress.py 600
 
-python3 qrcode.py $(cat /sys/class/net/enp0s25/address)
+python3 qrcode-gen.py $(cat /sys/class/net/enp0s25/address)
 #smartctl -t long /dev/sda
 #echo "Sleep command is issued for 150 seconds"
 #sleep 4000
