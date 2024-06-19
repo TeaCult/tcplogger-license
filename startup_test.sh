@@ -27,10 +27,12 @@ while grep -q "in progress" <(smartctl -a /dev/sda); do
     sleep 10  # Sleeps for 10 seconds before checking again
 done
 
-if grep -q "PASSED" <(smartctl -a /dev/sda); do
+if [[ $(smartctl -a/dev/sda) == *"PASSED"* ]]; then
     curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp0s25/address)-smartctl\": \"Smart test result is: PASSED\"}" http://192.168.5.26:5000/data
-done
-curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp0s25/address)-smartctl\": \"All tests are finished nothing more to perform!\"}" http://192.168.5.26:5000/data
+else 
+    curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp0s25/address)-smartctl\": \"Smart test result is: FAILED\"}" http://192.168.5.26:5000/data
+fi
+curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp0s25/address)-smartctl\": \"All tests are finished nothing more to perform\"}" http://192.168.5.26:5000/data
 
 
 
