@@ -9,7 +9,6 @@ wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/qrcode.p
 
 #python stress.py 600
 
-python3 checkids.py
 python3 qrcode.py $(cat /sys/class/net/enp0s25/address)
 #smartctl -t long /dev/sda
 #echo "Sleep command is issued for 150 seconds"
