@@ -3,7 +3,7 @@
 pacman -Sy --noconfirm stress lm_sensors dmidecode wget python-crypto python-qrcode
 sensors-detect --auto
 wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/stress.py
-wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/chekids.py
+wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/checkids.py
 wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/qrcode.py
 
 
