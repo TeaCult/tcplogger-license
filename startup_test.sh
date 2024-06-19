@@ -1,6 +1,6 @@
 /usr/bin/pacman-key --init
 /usr/bin/pacman-key --populate archlinux
-pacman -Sy --noconfirm stress lm_sensors dmidecode wget 
+pacman -Sy --noconfirm stress lm_sensors dmidecode wget net-tools
 pacman -Scc --noconfirm
 pacman -Sy --noconfirm python-crypto python-qrcode 
 pacman -Scc --noconfirm 
