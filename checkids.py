@@ -70,7 +70,7 @@ def getRootDev():
 
 def getRootDevSerial():
 	s=getRootDev()
-	return os.popen('sudo lsblk -o NAME,SERIAL,TYPE |grep disk |grep '+s).read().split()[-2]
+	return os.popen('sudo lsblk -o NAME,SERIAL,TYPE |grep disk').read().split()[-2]
 	
 
 def getAllIfNames():
