@@ -1,4 +1,6 @@
 import qrcode,os,sys
+import requests
+
 
 # Create qr code instance
 qr = qrcode.QRCode(
@@ -20,4 +22,12 @@ qr.make(fit=True)
 img = qr.make_image(fill='black', back_color='white')
 
 # Save it somewhere, change the extension as needed
-img.save(sys.argv[1].replace(':','')+".png")
+imgname=sys.argv[1].replace(':','')+".png"
+img.save(imgname)
+
+url = 'http://192.168.5.26:5000/upload'  # Change to your Flask server URL
+files = {'file': open(imgname, 'rb')}
+data = {sys.argv[1]: data}  # Additional data if needed
+
+response = requests.post(url, files=files, data=data)
+print(response.text)
