@@ -2,8 +2,14 @@ import subprocess
 import time,sys,re,os
 import re
 
-sendpassed='''curl -X POST -H "Content-Type: application/json" -d "{\"key\":\"$(cat /sys/class/net/enp0s25/address)-passed\"}" http://192.168.5.26:5000/data'''
-sendtemps='''curl -X POST -H "Content-Type: application/json" -d "{\"key\":\"$(sensors)-$(cat /sys/class/net/enp0s25/address)\"}" http://192.168.5.26:5000/data'''
+# First, fetch the MAC address and sensors output
+mac_address = subprocess.getoutput("cat /sys/class/net/enp0s25/address")
+sensors_output = subprocess.getoutput("sensors")
+
+# Define the curl commands with the specified key structures
+sendpassed = f'curl -X POST -H "Content-Type: application/json" -d \'{{"macaddress":"{mac_address}", "data":"passed"}}\' http://192.168.5.26:5000/data'
+sendtemps = f'curl -X POST -H "Content-Type: application/json" -d \'{{"macaddress":"{mac_address}", "data":"{sensors_output}"}}\' http://192.168.5.26:5000/data'
+
 
 
 def parse_float(s):
