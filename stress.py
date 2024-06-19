@@ -4,7 +4,7 @@ import re
 
 # First, fetch the MAC address and sensors output
 mac_address = subprocess.getoutput("cat /sys/class/net/enp0s25/address")
-sensors_output = subprocess.getoutput("sensors")
+sensors_output = subprocess.getoutput("sensors")[:-1].replace('\n',' -').replace('\t','')
 
 # Define the curl commands with the specified key structures
 sendpassed = f'curl -X POST -H "Content-Type: application/json" -d \'{{"macaddress":"{mac_address}", "data":"passed"}}\' http://192.168.5.26:5000/data'
