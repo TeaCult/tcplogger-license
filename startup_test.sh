@@ -14,11 +14,11 @@ python3 qrcode-gen.py $(cat /sys/class/net/enp0s25/address)
 
 python stress.py 6
 smartctl -t short /dev/sda
-#Waiting for smart test to finish"
+echo "Waiting for smart test to finish"
 while grep -q "in progress" <(smartctl -a /dev/sda); do
     sleep 10  # Sleeps for 10 seconds before checking again
 done
-#curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp0s25/address)-smartctl\": \"$(smartctl -a /dev/sda | tr -d '\n')\"}" http://192.168.5.26:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp0s25/address)-smartctl\": \"$(smartctl -a /dev/sda | tr -d '\n')\"}" http://192.168.5.26:5000/data
 
 
 
