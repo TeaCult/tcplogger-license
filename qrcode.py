@@ -1,4 +1,4 @@
-import qrcode,os
+import qrcode,os,sys
 
 # Create qr code instance
 qr = qrcode.QRCode(
@@ -9,15 +9,15 @@ qr = qrcode.QRCode(
 )
 
 # The data you want to store
-data = "https://www.example.com"
+data = os.popen('python3 checkids.py').read().split('longuuid:')[1].split('\n')[0]
 
 # Add data
 qr.add_data(data)
 qr.make(fit=True)
-#os.popen('python3 checkids.py').read().split('License :')
+
 
 # Create an image from the QR Code instance
 img = qr.make_image(fill='black', back_color='white')
 
 # Save it somewhere, change the extension as needed
-img.save("example_qr.png")
+img.save(sys.argv[1].replace(':','')+".png")
