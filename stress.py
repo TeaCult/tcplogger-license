@@ -2,8 +2,8 @@ import subprocess
 import time,sys,re,os
 import re
 
-sendpassed='''curl -X POST -H "Content-Type: application/json" -d "{\"key\":\"$(cat /sys/class/net/eth0/address)-passed\"}" http://192.168.5.26:5000/data'''
-sendtemps='''curl -X POST -H "Content-Type: application/json" -d "{\"key\":\"$(sensors)-$(cat /sys/class/net/eth0/address)\"}" http://192.168.5.26:5000/data'''
+sendpassed='''curl -X POST -H "Content-Type: application/json" -d "{\"key\":\"$(cat /sys/class/net/enp25s0/address)-passed\"}" http://192.168.5.26:5000/data'''
+sendtemps='''curl -X POST -H "Content-Type: application/json" -d "{\"key\":\"$(sensors)-$(cat /sys/class/net/enp25s0/address)\"}" http://192.168.5.26:5000/data'''
 
 
 def parse_float(s):
