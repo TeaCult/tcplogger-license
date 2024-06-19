@@ -11,7 +11,7 @@ qr = qrcode.QRCode(
 )
 
 # The data you want to store
-data = os.popen('python3 checkids.py').read().split('longuuid:')[1].split('\n')[0]
+data = os.popen('python3 checkids.py').read().split('longuuid=')[1].split('\n')[0]
 
 # Add data
 qr.add_data(data)
