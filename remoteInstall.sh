@@ -20,7 +20,7 @@ curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp
 sleep 2
 parted /dev/sda resizepart 3 320G || exit 1
 sleep 2
-e2fsck -f /dev/sda3 || exit 1
+e2fsck -f -p /dev/sda3 || exit 1
 sleep 2
 resize2fs /dev/sda3 275G || exit 1
 sleep 2
