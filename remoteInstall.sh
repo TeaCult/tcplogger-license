@@ -7,7 +7,20 @@ sleep 2
 echo "adjusting pacman keys"
 /usr/bin/pacman-key --populate archlinux ||exit 1
 sleep 2
-pacman -Sy --noconfirm stress lm_sensors dmidecode wget nbd qemu-img ||exit 1
+pacman -Sy --noconfirm stress lm_sensors ||exit1 
+sleep 2
+echo "Cleaning cache" 
+pacman -Scc --noconfirm
+sleep 2
+pacman -Sy --noconfirm dmidecode wget nbd ||exit 1
+sleep 2
+echo "Cleaning cache" 
+pacman -Scc --noconfirm
+sleep 2
+pacman -Sy --noconfirm  qemu-img ||exit 1
+sleep 2
+echo "Cleaning cache" 
+pacman -Scc --noconfirm
 sleep 2
 echo "loading nbd drivers"
 modprobe nbd ||exit 1 
