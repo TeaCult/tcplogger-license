@@ -2,8 +2,29 @@ import subprocess
 import time,sys,re,os
 import re
 
+def get_first_ethernet_info():
+    # Get the list of network interfaces
+    try:
+        result = subprocess.run(['ip', '-o', 'link', 'show'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        interfaces = result.stdout.splitlines()
+
+        for interface in interfaces:
+            # Only consider Ethernet interfaces (skip loopback and other non-ethernet devices)
+            if 'link/ether' in interface:
+                # Extract the interface name
+                name = interface.split(': ')[1].split('@')[0]
+
+                # Get the MAC address for the interface
+                mac_result = subprocess.run(['cat', f'/sys/class/net/{name}/address'], stdout=subprocess.PIPE, text=True)
+                mac_address = mac_result.stdout.strip()
+
+                return name, mac_address
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None, None
+        
 # First, fetch the MAC address and sensors output
-mac_address = subprocess.getoutput("cat /sys/class/net/enp0s25/address")
+ethname,mac_address = get_first_ethernet_info()
 sensors_output = subprocess.getoutput("sensors")[:-1].replace('\n',' -').replace('\t','')
 
 # Define the curl commands with the specified key structures
