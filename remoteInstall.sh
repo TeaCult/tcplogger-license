@@ -9,7 +9,7 @@ nbd_base_port=10809
 nbd_device="/dev/nbd0"
 disk_device="/dev/sda"
 max_port_attempts=20
-timeout_duration=5  # Timeout for each NBD connection attempt in seconds
+timeout_duration=30  # Timeout for each NBD connection attempt in seconds
 
 # Detect if sda is absent and replace with vda
 if [ ! -e /dev/sda ] && [ -e /dev/vda ]; then
@@ -42,25 +42,8 @@ sleep 2
 echo "loading nbd drivers"
 modprobe nbd || exit 1
 sleep 2
-
-exit 1
-
-# Try to connect to NBD server with fallback on ports
-for ((i=0; i<max_port_attempts; i++)); do
-    nbd_port=$((nbd_base_port + i))
-    echo "Attempting to connect to NBD server on port $nbd_port"
-    if timeout $timeout_duration nbd-client $nbd_server $nbd_port $nbd_device -N myimage; then
-        echo "Successfully connected to NBD server on port $nbd_port"
-        break
-    elif [ $i -eq $((max_port_attempts - 1)) ]; then
-        echo "Failed to connect to NBD server after $max_port_attempts attempts"
-        exit 1
-    else
-        echo "Port $nbd_port not available, trying next port..."
-    fi
-    sleep 2
-done
-
+nbd-client 192.168.5.26 10809 /dev/nbd0 -N myimage || exit 1
+sleep 2 
 # Report installation status to the server
 curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp0s25/address)\": \"Installing tcplogger image\"}" http://$nbd_server:5000/data
 sleep 2
