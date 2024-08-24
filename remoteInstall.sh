@@ -43,6 +43,8 @@ echo "loading nbd drivers"
 modprobe nbd || exit 1
 sleep 2
 
+exit 1
+
 # Try to connect to NBD server with fallback on ports
 for ((i=0; i<max_port_attempts; i++)); do
     nbd_port=$((nbd_base_port + i))
