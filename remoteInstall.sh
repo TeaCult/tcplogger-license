@@ -9,6 +9,7 @@ nbd_base_port=10809
 nbd_device="/dev/nbd0"
 disk_device="/dev/sda"
 max_port_attempts=20
+timeout_duration=10  # Timeout for each NBD connection attempt in seconds
 
 # Detect if sda is absent and replace with vda
 if [ ! -e /dev/sda ] && [ -e /dev/vda ]; then
@@ -46,7 +47,7 @@ sleep 2
 for ((i=0; i<max_port_attempts; i++)); do
     nbd_port=$((nbd_base_port + i))
     echo "Attempting to connect to NBD server on port $nbd_port"
-    if nbd-client $nbd_server $nbd_port $nbd_device -N myimage; then
+    if timeout $timeout_duration nbd-client $nbd_server $nbd_port $nbd_device -N myimage; then
         echo "Successfully connected to NBD server on port $nbd_port"
         break
     elif [ $i -eq $((max_port_attempts - 1)) ]; then
