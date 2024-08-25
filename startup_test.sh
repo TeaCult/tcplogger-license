@@ -87,10 +87,13 @@ execute_with_delay qemu-img convert -p -f qcow2 -O raw $nbd_device $disk_device
 
 
 # Disk operations
-post_data "Increasing Disk Size"
+post_data "Increasing partition 3 size"
 execute_with_delay parted $disk_device resizepart 3 $(get_disk_size_gb $disk_device)G
+post_data "Checking part 3 with e2fsck" 
 execute_with_delay e2fsck -f -p ${disk_device}3
-execute_with_delay resize2fs ${disk_device}3 $(($(get_disk_size_gb ${disk_device}) - 30))G
+post_data "Resizing file system on partition 3"
+execute_with_delay resize2fs ${disk_device}3 $(($(get_disk_size_gb ${disk_device}) - 25))G
+post_data "Disk resizing operations are finished"
 
 # Disconnect from NBD server
 post_data "Disconnecting from NBD server"
