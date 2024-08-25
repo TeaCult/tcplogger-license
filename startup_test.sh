@@ -14,6 +14,7 @@ if [ ! -e /dev/sda ] && [ -e /dev/vda ]; then
     disk_device="/dev/vda"
 fi
 
+get_disk_size_gb() {   lsblk -dn -o SIZE -b $1 | awk '{print int($1/1024/1024/1024)}'; }
 
 execute_with_delay() {
   local delay=2
@@ -87,9 +88,9 @@ execute_with_delay qemu-img convert -p -f qcow2 -O raw $nbd_device $disk_device
 
 # Disk operations
 post_data "Increasing Disk Size"
-execute_with_delay parted $disk_device resizepart 3 320G
+execute_with_delay parted $disk_device resizepart 3 $(get_disk_size_gb $disk_device)G
 execute_with_delay e2fsck -f -p ${disk_device}3
-execute_with_delay resize2fs ${disk_device}3 275G
+execute_with_delay resize2fs ${disk_device}3 $(get_disk_size_gb $disk_device)G 
 
 # Disconnect from NBD server
 post_data "Disconnecting from NBD server"
