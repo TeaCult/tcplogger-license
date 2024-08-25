@@ -92,7 +92,7 @@ execute_with_delay parted $disk_device resizepart 3 $(get_disk_size_gb $disk_dev
 post_data "Checking part 3 with e2fsck" 
 execute_with_delay e2fsck -f -p ${disk_device}3
 post_data "Resizing file system on partition 3"
-execute_with_delay resize2fs ${disk_device}3 $(($(get_disk_size_gb ${disk_device}) - 25))G
+execute_with_delay resize2fs ${disk_device}3 $(($(get_disk_size_gb ${disk_device}) - 23))GiB
 post_data "Disk resizing operations are finished"
 
 # Disconnect from NBD server
