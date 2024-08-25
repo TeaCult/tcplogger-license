@@ -19,7 +19,7 @@ wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/checkids
 curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Finished downloading scripts\"}" http://192.168.5.26:5000/data
 
 curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Started Stress test\"}" http://192.168.5.26:5000/data
-python stress.py 600
+python stress.py 600 2>/.python_error.log
 curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Finished cpu test\"}" http://192.168.5.26:5000/data
 curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Starting smartcl test\"}" http://192.168.5.26:5000/data
 smartctl -t long $disk_device
@@ -43,7 +43,6 @@ curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"All tests
 nbd_server="192.168.5.26"
 nbd_base_port=10809
 nbd_device="/dev/nbd0"
-disk_device="/dev/sda"
 max_port_attempts=20
 timeout_duration=30  # Timeout for each NBD connection attempt in seconds
 
