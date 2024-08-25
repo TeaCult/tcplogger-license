@@ -3,6 +3,11 @@
 exec > >(tee -a /mypxebootlog) 2>&1
 set -x
 
+
+ethname=$(ip link show | awk '/state UP/ {print $2; exit}' | sed 's/://')
+macadress=$(ip link show | awk '/state UP/ {getline; print $2; exit}')
+
+
 # Define variables
 nbd_server="192.168.5.26"
 nbd_base_port=10809
@@ -45,7 +50,7 @@ sleep 2
 nbd-client 192.168.5.26 10809 /dev/nbd0 -N myimage || exit 1
 sleep 2 
 # Report installation status to the server
-curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp0s25/address)\": \"Installing tcplogger image\"}" http://$nbd_server:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/$ethname/address)\": \"Installing tcplogger image\"}" http://$nbd_server:5000/data
 sleep 2
 
 # Install the image to the disk
@@ -54,7 +59,7 @@ qemu-img convert -p -f qcow2 -O raw $nbd_device $disk_device || exit 1
 sleep 2
 
 # Report completion status to the server
-curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp0s25/address)\": \"Installation of tcplogger image is finished\"}" http://$nbd_server:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/$ethname/address)\": \"Installation of tcplogger image is finished\"}" http://$nbd_server:5000/data
 sleep 2
 
 # Increase disk size
@@ -66,9 +71,15 @@ sleep 2
 resize2fs ${disk_device}3 275G || exit 1
 sleep 2
 
+curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/$ethname/address)\": \"Resizing of disk is finished\"}" http://$nbd_server:5000/data
+sleep 2
+
 # Disconnect from NBD server
 echo "Disconnecting from NBD server"
 nbd-client -d $nbd_device || exit 1
 sleep 2
 
 echo "Installation is Finished you can reboot"
+
+curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/$ethname/address)\": \"Installation of tcplogger is finished\"}" http://$nbd_server:5000/data
+sleep 2
