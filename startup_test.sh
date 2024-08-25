@@ -8,20 +8,20 @@ fi
 
 /usr/bin/pacman-key --init
 /usr/bin/pacman-key --populate archlinux
-curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/enp0s25/address)\": \"Installing test packages\"}" http://192.168.5.26:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Installing test packages\"}" http://192.168.5.26:5000/data
 pacman -Sy --noconfirm stress lm_sensors dmidecode wget net-tools
 pacman -Scc --noconfirm
 sensors-detect --auto
-curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Finished installing test packages\"}" http://192.168.5.26:5000/data
-curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Downloading scripts\"}" http://192.168.5.26:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Finished installing test packages\"}" http://192.168.5.26:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Downloading scripts\"}" http://192.168.5.26:5000/data
 wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/stress.py
 wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/checkids.py
-curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Finished downloading scripts\"}" http://192.168.5.26:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Finished downloading scripts\"}" http://192.168.5.26:5000/data
 
-curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Started Stress test\"}" http://192.168.5.26:5000/data
-python stress.py 600 2>/.python_error.log
-curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Finished cpu test\"}" http://192.168.5.26:5000/data
-curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Starting smartcl test\"}" http://192.168.5.26:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Started Stress test\"}" http://192.168.5.26:5000/data
+python stress.py 600
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Finished cpu test\"}" http://192.168.5.26:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Starting smartcl test\"}" http://192.168.5.26:5000/data
 smartctl -t long $disk_device
 echo "Waiting for smart test to finish"
 while grep -q "in progress" <(smartctl -a $disk_device); do
@@ -29,11 +29,11 @@ while grep -q "in progress" <(smartctl -a $disk_device); do
 done
 
 if [[ $(smartctl -a $disk_device) == *"PASSED"* ]]; then
-    curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Smart test result is: PASSED\"}" http://192.168.5.26:5000/data
+    curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Smart test result is: PASSED\"}" http://192.168.5.26:5000/data
 else 
-    curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"Smart test result is: FAILED\"}" http://192.168.5.26:5000/data
+    curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Smart test result is: FAILED\"}" http://192.168.5.26:5000/data
 fi
-curl -X POST -H "Content-Type: application/json" -d "{\"macadress\": \"All tests are finished nothing more to perform\"}" http://192.168.5.26:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"All tests are finished nothing more to perform\"}" http://192.168.5.26:5000/data
 
 ############ INSTALL PART (remoteinstall.sh) ##############
 
@@ -58,7 +58,7 @@ sleep 2
 nbd-client 192.168.5.26 10809 /dev/nbd0 -N myimage || exit 1
 sleep 2 
 # Report installation status to the server
-curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/$ethname/address)\": \"Installing tcplogger image\"}" http://$nbd_server:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Installing tcplogger image\"}" http://$nbd_server:5000/data
 sleep 2
 
 # Install the image to the disk
@@ -67,7 +67,7 @@ qemu-img convert -p -f qcow2 -O raw $nbd_device $disk_device || exit 1
 sleep 2
 
 # Report completion status to the server
-curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/$ethname/address)\": \"Installation of tcplogger image is finished\"}" http://$nbd_server:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Installation of tcplogger image is finished\"}" http://$nbd_server:5000/data
 sleep 2
 
 # Increase disk size
@@ -79,7 +79,7 @@ sleep 2
 resize2fs ${disk_device}3 275G || exit 1
 sleep 2
 
-curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/$ethname/address)\": \"Resizing of disk is finished\"}" http://$nbd_server:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Resizing of disk is finished\"}" http://$nbd_server:5000/data
 sleep 2
 
 # Disconnect from NBD server
@@ -89,7 +89,7 @@ sleep 2
 
 echo "Installation is Finished you can reboot"
 
-curl -X POST -H "Content-Type: application/json" -d "{\"$(cat /sys/class/net/$ethname/address)\": \"Installation of tcplogger is finished\"}" http://$nbd_server:5000/data
+curl -X POST -H "Content-Type: application/json" -d "{\"$macadress\": \"Installation of tcplogger is finished\"}" http://$nbd_server:5000/data
 sleep 2
 
 
