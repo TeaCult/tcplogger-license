@@ -40,7 +40,6 @@ sensors-detect --auto
 post_data "Finished installing test packages and Downloading test Scripts"
 
 wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/stress.py
-wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/checkids.py
 
 post_data "Finished downloading scripts"
 
