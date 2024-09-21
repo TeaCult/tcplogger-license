@@ -8,7 +8,7 @@ max_port_attempts=20
 timeout_duration=30  # Timeout for each NBD connection attempt in seconds
 base_url="http://192.168.5.26:5000/data"
 
-disk=device="/dev/sda"
+disk_device="/dev/sda"
 # Detect if sda is absent and replace with vda
 if [ ! -e /dev/sda ] && [ -e /dev/vda ]; then
     disk_device="/dev/vda"
