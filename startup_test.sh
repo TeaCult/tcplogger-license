@@ -48,6 +48,10 @@ python stress.py 300
 
 post_data "Finished cpu test and Starting SMART test"
 smartctl -t long $disk_device
+
+print('Sleeping 600 seconds before checking if smart test is in progress or not') 
+time.sleep(600)
+
 while grep -q "in progress" <(smartctl -a $disk_device); do
     sleep 10  # Sleeps for 10 seconds before checking again
 done
