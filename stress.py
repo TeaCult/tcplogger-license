@@ -28,8 +28,8 @@ ethname,mac_address = get_first_ethernet_info()
 sensors_output = subprocess.getoutput("sensors")[:-1].replace('\n',' -').replace('\t','')
 
 # Define the curl commands with the specified key structures
-sendpassed = f'curl -X POST -H "Content-Type: application/json" -d \'{{"macaddress":"{mac_address}", "data":"passed cpu temp stress test"}}\' http://192.168.5.26:5000/data'
-sendtemps = f'curl -X POST -H "Content-Type: application/json" -d \'{{"macaddress":"{mac_address}", "data":"{sensors_output}"}}\' http://192.168.5.26:5000/data'
+sendpassed = f'curl -X POST -H "Content-Type: application/json" -d \'{{"{mac_address}","passed cpu temp stress test"}}\' http://192.168.5.26:5000/data'
+sendtemps = f'curl -X POST -H "Content-Type: application/json" -d \'{{"{mac_address}","{sensors_output}"}}\' http://192.168.5.26:5000/data'
 
 
 
@@ -54,6 +54,7 @@ def start_stress():
 # Function to record temperatures and CPU usage
 def record_temperatures_and_usage(stress_process, serial_number):
     final_record = ""
+    restemp
     while stress_process.poll() is None:  # Checks if stress process is still running
         # Retrieve temperatures for Core 0 and Core 1
         temp_core0 = subprocess.getoutput("sensors | grep 'Core 0:' | awk '{print $3}'")
@@ -72,11 +73,12 @@ def record_temperatures_and_usage(stress_process, serial_number):
         red_temp_core0 = f"\033[91m{temp_core0}\033[0m"
         red_temp_core1 = f"\033[91m{temp_core1}\033[0m"
         final_record = f"{current_time} | CPU Usage: {cpu_usage}% | Core 0 Temp: {red_temp_core0} | Core 1 Temp: {red_temp_core1}"
+        restemp=f"CPU Usage: {cpu_usage}% | Cpu 1: {temp_core0} | Temp 2: {temp_core1}"
         print(final_record)
         time.sleep(1)
         # Finished Successfully 
     os.system(sendpassed)
-    os.system(f'curl -X POST -H "Content-Type: application/json" -d \'{{"macaddress":"{mac_address}", "data":"{final_record}"}}\' http://192.168.5.26:5000/data')
+    os.system(f'curl -X POST -H "Content-Type: application/json" -d \'{{"{mac_address}","{restemp}"}}\' http://192.168.5.26:5000/data')
 
     
     # Write final record to log file
