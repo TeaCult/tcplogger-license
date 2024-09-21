@@ -54,7 +54,7 @@ def start_stress():
 # Function to record temperatures and CPU usage
 def record_temperatures_and_usage(stress_process, serial_number):
     final_record = ""
-    restemp
+    restemp= ""
     while stress_process.poll() is None:  # Checks if stress process is still running
         # Retrieve temperatures for Core 0 and Core 1
         temp_core0 = subprocess.getoutput("sensors | grep 'Core 0:' | awk '{print $3}'")
