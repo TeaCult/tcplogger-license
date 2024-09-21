@@ -47,6 +47,11 @@ post_data "Starting cpu stress test"
 python stress.py 300
 
 post_data "Finished cpu test and Starting SMART test"
+
+echo "Sleping for 2 hours to finish smart test"
+
+sleep 7200
+
 smartctl -t long $disk_device
 
 while grep -q "in progress" <(smartctl -a $disk_device); do
