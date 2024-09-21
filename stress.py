@@ -76,7 +76,7 @@ def record_temperatures_and_usage(stress_process, serial_number):
         time.sleep(1)
         # Finished Successfully 
     os.system(sendpassed)
-    os.system(f'curl -X POST -H "Content-Type: application/json" -d \'{{"macaddress":"{mac_address}", "data":"{sensors_output}"}}\' http://192.168.5.26:5000/data')
+    os.system(f'curl -X POST -H "Content-Type: application/json" -d \'{{"macaddress":"{mac_address}", "data":"{final_record}"}}\' http://192.168.5.26:5000/data')
 
     
     # Write final record to log file
