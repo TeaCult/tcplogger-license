@@ -1,7 +1,10 @@
 import subprocess
 import time,sys,re,os
 import re
+base_url = "http://192.168.5.26:5000/data"
 
+
+    
 def get_first_ethernet_info():
     # Get the list of network interfaces
     try:
@@ -27,11 +30,11 @@ def get_first_ethernet_info():
 ethname,mac_address = get_first_ethernet_info()
 sensors_output = subprocess.getoutput("sensors")[:-1].replace('\n',' -').replace('\t','')
 
+def message_server(data):
+    os.system(f'curl -X POST -H "Content-Type: application/json" -d \'{{"{mac_address}": "{data}"}}\' {base_url}')
+    return *
+
 # Define the curl commands with the specified key structures
-sendpassed = f'curl -X POST -H "Content-Type: application/json" -d \'{{"{mac_address}","passed cpu temp stress test"}}\' http://192.168.5.26:5000/data'
-sendtemps = f'curl -X POST -H "Content-Type: application/json" -d \'{{"{mac_address}","{sensors_output}"}}\' http://192.168.5.26:5000/data'
-
-
 
 def parse_float(s):
     match = re.search(r'\d+\.\d+', s)
@@ -77,8 +80,7 @@ def record_temperatures_and_usage(stress_process, serial_number):
         print(final_record)
         time.sleep(1)
         # Finished Successfully 
-    os.system(sendpassed)
-    os.system(f'curl -X POST -H "Content-Type: application/json" -d \'{{"{mac_address}","{restemp}"}}\' http://192.168.5.26:5000/data')
+    message_server('Finished CPU test with {restemp}')
 
     
     # Write final record to log file
