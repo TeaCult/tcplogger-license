@@ -76,7 +76,7 @@ fi
 
 
 # Start installations and configurations
-post_data "Performain qemu-img installation"
+post_data "Performing qemu-img installation"
 execute_with_delay pacman -Sy --noconfirm qemu-img
 execute_with_delay pacman -Scc --noconfirm
 
