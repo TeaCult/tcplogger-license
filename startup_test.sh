@@ -44,7 +44,7 @@ wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/stress.p
 post_data "Finished downloading scripts"
 
 post_data "Starting cpu stress test"
-python stress.py 300
+python stress.py 30
 
 post_data "Finished cpu test and Starting SMART test"
 
