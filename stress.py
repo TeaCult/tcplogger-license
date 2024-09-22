@@ -32,7 +32,7 @@ sensors_output = subprocess.getoutput("sensors")[:-1].replace('\n',' -').replace
 
 def message_server(data):
     os.system(f'curl -X POST -H "Content-Type: application/json" -d \'{{"{mac_address}": "{data}"}}\' {base_url}')
-    return *
+    return 0
 
 # Define the curl commands with the specified key structures
 
