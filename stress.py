@@ -80,7 +80,7 @@ def record_temperatures_and_usage(stress_process, serial_number):
         print(final_record)
         time.sleep(1)
         # Finished Successfully 
-    message_server('Finished CPU test with {restemp}')
+    message_server(f'Finished CPU test with {restemp}')
 
     
     # Write final record to log file
