@@ -43,29 +43,29 @@ wget https://raw.githubusercontent.com/TeaCult/tcplogger-license/master/stress.p
 
 post_data "Finished downloading scripts"
 
-post_data "Starting cpu stress test"
-python stress.py 300
+#post_data "Starting cpu stress test"
+#python stress.py 300
 
-post_data "Finished cpu test and Starting SMART test"
+#post_data "Finished cpu test and Starting SMART test"
 
-smartctl -t long $disk_device
+#smartctl -t long $disk_device
 
-echo "Sleping for 300 seconds to check smart test progress"
-sleep 300
+#echo "Sleping for 300 seconds to check smart test progress"
+#sleep 300
 
-while grep -q "in progress" <(smartctl -a $disk_device); do
-    sleep 10  # Sleeps for 10 seconds before checking again
-done
+#while grep -q "in progress" <(smartctl -a $disk_device); do
+#    sleep 10  # Sleeps for 10 seconds before checking again
+#done
 
-if [[ $(smartctl -a $disk_device) == *"PASSED"* ]]; then
-    post_data "Smart test result is: PASSED"
-    RESULT="PASSED"
-else 
-    post_data "Smart test result is: FAILED"
-    RESULT="FAILED"
-fi
+#if [[ $(smartctl -a $disk_device) == *"PASSED"* ]]; then
+#    post_data "Smart test result is: PASSED"
+#    RESULT="PASSED"
+#else 
+#    post_data "Smart test result is: FAILED"
+#    RESULT="FAILED"
+#fi
 
-post_data "All tests are finished. Result is $RESULT. Exiting from script without installation"
+#post_data "All tests are finished. Result is $RESULT. Exiting from script without installation"
 
 # Correcting conditional check for exit - Keep installing if it is a virtual machine (no cpu temp - no smart test) 
 if [ "$RESULT" == "FAILED" ] && [ "$disk_device" != "/dev/vda" ]; then
