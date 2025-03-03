@@ -67,6 +67,10 @@ post_data "Finished downloading scripts"
 
 #post_data "All tests are finished. Result is $RESULT. Exiting from script without installation"
 
+
+############# BADBLOCKS TEST OF FIRST 20 GB ####################
+# badblocks -wvs /dev/sda -b 1024 -c 65536 -p 5 20971520
+
 RESULT="TESTBYPASSED"
 # Correcting conditional check for exit - Keep installing if it is a virtual machine (no cpu temp - no smart test) 
 if [ "$RESULT" == "FAILED" ] && [ "$disk_device" != "/dev/vda" ]; then
